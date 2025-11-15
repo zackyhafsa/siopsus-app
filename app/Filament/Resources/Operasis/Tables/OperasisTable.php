@@ -29,6 +29,25 @@ class OperasisTable
                 Tables\Columns\TextColumn::make('nomor_polisi')
                     ->label('No. Polisi')->searchable()->sortable(),
 
+                \Filament\Tables\Columns\TextColumn::make('lokasi')
+                    ->label('Lokasi')
+                    ->limit(30)
+                    ->tooltip(fn($state) => $state) // hover untuk lihat full
+                    ->searchable()
+                    ->url(function (\App\Models\Operasi $record) {
+                        if (! $record->lokasi && ! ($record->latitude && $record->longitude)) {
+                            return null;
+                        }
+
+                        // Prioritas: koordinat kalau ada, else alamat teks
+                        $query = ($record->latitude && $record->longitude)
+                            ? $record->latitude . ',' . $record->longitude
+                            : $record->lokasi;
+
+                        return 'https://www.google.com/maps/search/?api=1&query=Majalengka' . urlencode($query);
+                    })
+                    ->openUrlInNewTab(),
+
                 Tables\Columns\TextColumn::make('jenis_kendaraan')
                     ->label('Jenis')->badge()->colors([
                         'warning' => 'R2',

@@ -12,7 +12,8 @@ class OperasiForm
             // === Data Operasi ===
             \Filament\Forms\Components\DateTimePicker::make('tanggal_operasi')
                 ->label('Tanggal Operasi')
-                ->seconds(false),
+                ->seconds(false)
+                ->required(),
 
             \Filament\Forms\Components\TextInput::make('nama_penelusur')
                 ->label('Nama Penelusur')
@@ -33,7 +34,8 @@ class OperasiForm
                 ->required(),
 
             \Filament\Forms\Components\DatePicker::make('jatuh_tempo_pajak')
-                ->label('Jatuh Tempo Pajak'),
+                ->label('Jatuh Tempo Pajak')
+                ->required(),
 
             \Filament\Forms\Components\TextInput::make('pokok_pkb')
                 ->label('Pokok PKB')->numeric()->minValue(0)->default(0)->prefix('Rp')
@@ -41,7 +43,9 @@ class OperasiForm
                 ->stripCharacters([',', '.'])
                 ->numeric()
                 ->minValue(0)
+                ->required()
                 ->default(0),
+
             \Filament\Forms\Components\TextInput::make('denda_pkb')
                 ->label('Denda PKB')->mask(\Filament\Support\RawJs::make('$money($input)'))
                 ->stripCharacters([',', '.'])
@@ -54,7 +58,8 @@ class OperasiForm
                 ->stripCharacters([',', '.'])
                 ->numeric()
                 ->minValue(0)
-                ->default(0),
+                ->default(0)
+                ->required(),
 
             \Filament\Forms\Components\TextInput::make('denda_opsen_pkb')
                 ->label('Denda Opsen PKB')->mask(\Filament\Support\RawJs::make('$money($input)'))
@@ -68,7 +73,8 @@ class OperasiForm
                 ->stripCharacters([',', '.'])
                 ->numeric()
                 ->minValue(0)
-                ->default(0),
+                ->default(0)
+                ->required(),
 
             \Filament\Forms\Components\TextInput::make('denda_swdkllj')
                 ->label('Denda SWDKLLJ')->mask(\Filament\Support\RawJs::make('$money($input)'))
@@ -76,6 +82,26 @@ class OperasiForm
                 ->numeric()
                 ->minValue(0)
                 ->default(0),
+
+            \Filament\Forms\Components\TextInput::make('lokasi')
+                ->label('Lokasi (alamat/deskripsi)')
+                ->placeholder('Contoh: Ds. Maja Selatan, Kec. Maja, Kab. Majalengka')
+                ->maxLength(191)
+                ->required(),
+
+            // Koordinat (opsional)
+            \Filament\Forms\Components\TextInput::make('latitude')
+                ->label('Latitude')
+                ->numeric()->minValue(-90)->maxValue(90)
+                ->step('any')
+                ->helperText('Opsional, -90 s/d 90'),
+
+            \Filament\Forms\Components\TextInput::make('longitude')
+                ->label('Longitude')
+                ->numeric()->minValue(-180)->maxValue(180)
+                ->step('any')
+                ->helperText('Opsional, -180 s/d 180'),
+
             \Filament\Forms\Components\Select::make('status_pembayaran')
                 ->label('Status Pembayaran')
                 ->options([
@@ -84,6 +110,7 @@ class OperasiForm
                 ])
                 ->required()
                 ->default('belum_bayar'),
+
             \Filament\Forms\Components\FileUpload::make('foto_kendaraan')
                 ->label('Foto Kendaraan')
                 ->image()
