@@ -16,6 +16,7 @@ class OperasisExport implements FromCollection, WithHeadings, WithMapping, Shoul
         protected ?string $to = null,
         protected ?string $status = null,
         protected ?string $jenis = null,
+        protected ?string $search = null,
     ) {}
 
     public function collection()
@@ -25,6 +26,13 @@ class OperasisExport implements FromCollection, WithHeadings, WithMapping, Shoul
             ->when($this->to, fn($q) => $q->whereDate('tanggal_operasi', '<=', $this->to))
             ->when($this->status, fn($q) => $q->where('status_pembayaran', $this->status))
             ->when($this->jenis, fn($q) => $q->where('jenis_kendaraan', $this->jenis))
+            ->when($this->search, function ($q) {
+                $q->where(function ($qq) {
+                    $qq->where('nama_penelusur', 'like', "%{$this->search}%")
+                        ->orWhere('nomor_polisi', 'like', "%{$this->search}%")
+                        ->orWhere('lokasi', 'like', "%{$this->search}%");
+                });
+            })
             ->latest('tanggal_operasi')
             ->get();
     }

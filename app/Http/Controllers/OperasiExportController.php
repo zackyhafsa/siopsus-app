@@ -16,17 +16,19 @@ class OperasiExportController extends Controller
     {
         $from   = $request->query('from');
         $to     = $request->query('to');
-        $status = $request->query('status');   // 'sudah_bayar'|'belum_bayar'|null
-        $jenis  = $request->query('jenis');    // 'R2'|'R4'|null
-        $search = $request->query('search');   // string|null
-        $format = $request->query('format', 'xlsx'); // xlsx|csv
+        $status = $request->query('status');
+        $jenis  = $request->query('jenis');
+        $search = $request->query('search');
+        $format = $request->query('format', 'xlsx');
 
-        $export = new OperasisExport($from, $to, $status, $jenis, $search);
+        $export = new \App\Exports\OperasisExport($from, $to, $status, $jenis, $search);
 
-        $filename = 'laporan-operasi-' . now()->format('Ymd_His') . '.' . $format;
-        $writerType = $format === 'csv' ? ExcelWriter::CSV : ExcelWriter::XLSX;
+        $filename   = 'laporan-operasi-' . now()->format('Ymd_His') . '.' . $format;
+        $writerType = $format === 'csv'
+            ? \Maatwebsite\Excel\Excel::CSV
+            : \Maatwebsite\Excel\Excel::XLSX;
 
-        return Excel::download($export, $filename, $writerType);
+        return \Maatwebsite\Excel\Facades\Excel::download($export, $filename, $writerType);
     }
 
     // /admin/operasis/export/pdf?from=...&to=...&status=...&jenis=...
