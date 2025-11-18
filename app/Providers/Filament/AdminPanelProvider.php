@@ -33,6 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
+            ->brandLogo(asset("images/siopsus-logo.png"))
+            ->brandLogoHeight("5rem")
             ->widgets([
                 OperasiStats::class,
                 OperasiJumlahChart::class,

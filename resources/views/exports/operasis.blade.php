@@ -220,7 +220,7 @@ $statusLabel = $status === 'sudah_bayar' ? 'Sudah Dibayar' : ($status === 'belum
 
         .status-badge {
             display: inline-block;
-            padding: 2px 6px;
+            padding: 2px;
             border-radius: 6px;
             font-size: 10px;
             color: #fff;

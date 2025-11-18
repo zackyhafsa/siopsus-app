@@ -109,7 +109,9 @@ class OperasiForm
                     'sudah_bayar' => 'Sudah Dibayar',
                 ])
                 ->required()
-                ->default('belum_bayar'),
+                ->default('belum_bayar')
+                ->placeholder(null)
+                ->native(false),
 
             \Filament\Forms\Components\FileUpload::make('foto_kendaraan')
                 ->label('Foto Kendaraan')

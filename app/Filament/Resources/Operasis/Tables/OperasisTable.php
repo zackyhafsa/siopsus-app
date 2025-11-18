@@ -66,7 +66,9 @@ class OperasisTable
                         'belum_bayar' => 'Belum Dibayar',
                         'sudah_bayar' => 'Sudah Dibayar',
                     ])
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder(null)
+                    ->native(false),
             ])
             ->emptyStateHeading('Belum ada data operasi')
             ->emptyStateDescription('Klik tombol "Tambah Data" untuk memasukkan laporan operasi pertama.')
@@ -92,7 +94,6 @@ class OperasisTable
                         'belum_bayar' => 'Belum Dibayar',
                         'sudah_bayar' => 'Sudah Dibayar',
                     ]),
-
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('jenis_kendaraan')
