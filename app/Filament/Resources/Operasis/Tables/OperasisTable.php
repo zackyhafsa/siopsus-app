@@ -6,6 +6,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Number;
 use Filament\Forms;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
 class OperasisTable
 {
@@ -74,68 +77,50 @@ class OperasisTable
             ->emptyStateDescription('Klik tombol "Tambah Data" untuk memasukkan laporan operasi pertama.')
             ->emptyStateIcon('heroicon-o-clipboard-document-check')
             ->filters([
-                \Filament\Tables\Filters\Filter::make('rentang_tanggal')
+                Filter::make('rentang_tanggal')
                     ->label('Rentang Tanggal')
                     ->form([
-                        Forms\Components\DatePicker::make('from')->label('Dari'),
-                        Forms\Components\DatePicker::make('to')->label('Sampai'),
+                        DatePicker::make('from')
+                            ->label('Dari')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
+                        DatePicker::make('to')
+                            ->label('Sampai')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
                     ])
-                    ->query(function (\Illuminate\Database\Eloquent\Builder $query, array $data) {
+                    ->query(function (Builder $query, array $data): Builder {
+                        $from = $data['from'] ?? null;
+                        $to   = $data['to'] ?? null;
+
                         return $query
-                            ->when($data['from'] ?? null, fn($q, $from) => $q->whereDate('tanggal_operasi', '>=', $from))
-                            ->when($data['to'] ?? null, fn($q, $to) => $q->whereDate('tanggal_operasi', '<=', $to));
+                            ->when($from, fn(Builder $q) => $q->whereDate('tanggal_operasi', '>=', $from))
+                            ->when($to,   fn(Builder $q) => $q->whereDate('tanggal_operasi', '<=', $to));
+                    })
+                    ->indicateUsing(function (array $data): ?string {
+                        $from = $data['from'] ?? null;
+                        $to   = $data['to'] ?? null;
+
+                        if ($from && $to)   return "Tanggal: {$from} s/d {$to}";
+                        if ($from)          return "Mulai: {$from}";
+                        if ($to)            return "Sampai: {$to}";
+                        return null;
                     }),
-                \Filament\Tables\Filters\SelectFilter::make('jenis_kendaraan')
+
+                Tables\Filters\SelectFilter::make('jenis_kendaraan')
                     ->label('Jenis Kendaraan')
                     ->options(['R2' => 'R2', 'R4' => 'R4']),
-                \Filament\Tables\Filters\SelectFilter::make('status_pembayaran')
+
+                Tables\Filters\SelectFilter::make('status_pembayaran')
                     ->label('Status Pembayaran')
                     ->options([
                         'belum_bayar' => 'Belum Dibayar',
                         'sudah_bayar' => 'Sudah Dibayar',
                     ]),
             ])
-            ->filters([
-                Tables\Filters\SelectFilter::make('jenis_kendaraan')
-                    ->label('Jenis Kendaraan')->options(['R2' => 'R2', 'R4' => 'R4']),
-            ])
-            ->headerActions([
-                // \Filament\Tables\Actions\CreateAction::make()
-                //     ->label('Tambah Data')
-                //     ->icon('heroicon-m-plus')
-                //     ->color('success'),
-
-                // \Filament\Tables\Actions\Action::make('exportExcel')
-                //     ->label('Export Excel')
-                //     ->icon('heroicon-m-arrow-down-tray')
-                //     ->url(fn() => route('operasis.export.excel')) // semua data
-                //     ->openUrlInNewTab(),
-
-                // \Filament\Tables\Actions\Action::make('exportCsv')
-                //     ->label('Export CSV')
-                //     ->icon('heroicon-m-arrow-down-tray')
-                //     ->url(fn() => route('operisis.export.excel', ['format' => 'csv'])) // typo? pastikan route name tepat
-                //     // perbaiki: harus route('operasis.export.excel', ['format' => 'csv'])
-                //     ->url(fn() => route('operasis.export.excel', ['format' => 'csv']))
-                //     ->openUrlInNewTab(),
-
-                // \Filament\Tables\Actions\Action::make('exportPdf')
-                //     ->label('Export PDF')
-                //     ->icon('heroicon-m-document-arrow-down')
-                //     ->url(fn() => route('operasis.export.pdf'))
-                //     ->openUrlInNewTab(),
-            ]);
-
-        // ->actions([
-        //     Tables\Actions\EditAction::make(),
-        //     Tables\Actions\DeleteAction::make(),
-        // ])
-        // ->headerActions([
-        //     Tables\Actions\CreateAction::make()->label('Tambah Data'),
-        // ])
-        // ->bulkActions([
-        //     Tables\Actions\DeleteBulkAction::make(),
-        // ])
-        // ->defaultSort('tanggal_operasi', 'desc');
+            ->recordAction(null)
+            ->recordUrl(null)
+            ->checkIfRecordIsSelectableUsing(fn() => true)
+            ->defaultSort('tanggal_operasi', 'desc');
     }
 }

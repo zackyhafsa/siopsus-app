@@ -77,4 +77,35 @@ class ListOperasis extends ListRecords
             'search' => $search,
         ], fn($v) => filled($v));
     }
+
+    protected function getTableActions(): array
+    {
+        return [
+            Actions\EditAction::make(),
+            Actions\DeleteAction::make()
+                ->requiresConfirmation()
+                ->modalHeading('Hapus Data Operasi')
+                ->modalDescription('Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')
+                ->modalSubmitActionLabel('Ya, Hapus')
+                ->successNotificationTitle('Data berhasil dihapus'),
+        ];
+    }
+
+    protected function getTableBulkActions(): array
+    {
+        return [
+            Actions\BulkActionGroup::make([
+                Actions\DeleteBulkAction::make()
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Data Terpilih')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus semua data yang dipilih? Tindakan ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Ya, Hapus Semua')
+                    ->deselectRecordsAfterCompletion()
+                    ->successNotificationTitle('Data terpilih berhasil dihapus'),
+            ])
+                ->label('')
+                ->icon('heroicon-m-ellipsis-vertical')
+                ->tooltip('Actions'),
+        ];
+    }
 }

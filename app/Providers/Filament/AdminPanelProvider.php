@@ -2,8 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\OperasiJumlahChart;
-use App\Filament\Widgets\OperasiPotensiChart;
+use \App\Filament\Widgets\RangeFilterBar;
 use App\Filament\Widgets\OperasiStats;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -36,14 +35,14 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset("images/siopsus-logo.png"))
             ->brandLogoHeight("5rem")
             ->widgets([
+                RangeFilterBar::class,
                 OperasiStats::class,
-                OperasiJumlahChart::class,
-                OperasiPotensiChart::class
             ])
             ->sidebarWidth('18rem')
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('5rem')
             ->brandName("Siopsus")
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
