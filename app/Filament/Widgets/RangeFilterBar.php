@@ -3,9 +3,14 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
+use Illuminate\Support\Facades\Auth;
 
 class RangeFilterBar extends Widget
 {
+    public static function canView(): bool
+    {
+        return Auth::check() && Auth::user()->isAdmin();
+    }
     protected ?string $heading = null;
     protected string $view = 'filament.widgets.range-filter-bar';
 

@@ -8,11 +8,13 @@ use App\Filament\Resources\Operasis\Pages\ListOperasis;
 use App\Filament\Resources\Operasis\Schemas\OperasiForm;
 use App\Filament\Resources\Operasis\Tables\OperasisTable;
 use App\Models\Operasi;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Number;
 use Filament\Schemas\Schema;
 use BackedEnum;
@@ -46,5 +48,15 @@ class OperasiResource extends Resource
             'create' => CreateOperasi::route('/create'),
             'edit'   => EditOperasi::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $q = parent::getEloquentQuery();
+
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        return ($user?->isAdmin() ?? false) ? $q : $q->where('user_id', Auth::id());
     }
 }

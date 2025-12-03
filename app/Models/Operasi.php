@@ -19,6 +19,7 @@ class Operasi extends Model
         'pokok_swdkllj',
         'denda_swdkllj',
         'foto_kendaraan',
+        'user_id',
         'lokasi',
         'latitude',
         'longitude',
@@ -36,7 +37,8 @@ class Operasi extends Model
         'denda_swdkllj' => 'integer',
         'latitude' => 'float',
         'longitude' => 'float',
-        'status_pembayaran' => "string"
+        'status_pembayaran' => "string",
+        'user_id' => 'integer',
     ];
 
     public function getTotalTagihanAttribute(): int
@@ -49,5 +51,9 @@ class Operasi extends Model
             (int) ($this->pokok_swdkllj ?? 0),
             (int) ($this->denda_swdkllj ?? 0),
         ]);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

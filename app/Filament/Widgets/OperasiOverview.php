@@ -6,9 +6,14 @@ use App\Models\Operasi;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Number;
+use Illuminate\Support\Facades\Auth;
 
 class OperasiOverview extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return Auth::check() && Auth::user()->isAdmin();
+    }
     protected function getStats(): array
     {
         $totalKendaraan = Operasi::count();

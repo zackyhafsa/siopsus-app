@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Exports\OperasisExport;
 use App\Models\Operasi;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Excel as ExcelWriter;
 
 class OperasiExportController extends Controller
 {
+    public function __construct()
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        abort_unless(Auth::check() && ($user?->isAdmin() ?? false), 403);
+    }
     // /admin/operasis/export/excel?from=...&to=...&status=...&jenis=...&format=xlsx|csv
     public function excel(Request $request)
     {

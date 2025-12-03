@@ -4,11 +4,18 @@ namespace App\Filament\Resources\Operasis\Pages;
 
 use App\Filament\Resources\Operasis\OperasiResource;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 
 class CreateOperasi extends CreateRecord
 {
     protected static string $resource = OperasiResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['user_id'] = Auth::id();
+        return $data;
+    }
 
     public function getHeading(): string
     {

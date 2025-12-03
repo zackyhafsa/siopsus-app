@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\Operasis\Pages;
 
 use App\Filament\Resources\Operasis\OperasiResource;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Auth;
 
 class ListOperasis extends ListRecords
 {
@@ -14,6 +16,13 @@ class ListOperasis extends ListRecords
     public function getHeading(): string
     {
         return "Laporan Operasi";
+    }
+
+    private function isAdmin(): bool
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        return $user?->isAdmin() ?? false;
     }
 
     protected function getHeaderActions(): array
@@ -31,6 +40,7 @@ class ListOperasis extends ListRecords
                 ->url(fn() => route('operasis.export.excel', array_merge($this->buildExportQuery(), [
                     'format' => 'xlsx',
                 ])))
+                ->visible(fn() => $this->isAdmin())
                 ->openUrlInNewTab(),
             Actions\Action::make('exportCsv')
                 ->label('Export CSV')
@@ -38,12 +48,14 @@ class ListOperasis extends ListRecords
                 ->url(fn() => route('operasis.export.excel', array_merge($this->buildExportQuery(), [
                     'format' => 'csv',
                 ])))
+                ->visible(fn() => $this->isAdmin())
                 ->openUrlInNewTab(),
 
             Actions\Action::make('exportPdf')
                 ->label('Export PDF')
                 ->icon('heroicon-m-document-arrow-down')
                 ->url(fn() => route('operasis.export.pdf', $this->buildExportQuery()))
+                ->visible(fn() => $this->isAdmin())
                 ->openUrlInNewTab(),
         ];
     }
@@ -94,18 +106,13 @@ class ListOperasis extends ListRecords
     protected function getTableBulkActions(): array
     {
         return [
-            Actions\BulkActionGroup::make([
-                Actions\DeleteBulkAction::make()
-                    ->requiresConfirmation()
-                    ->modalHeading('Hapus Data Terpilih')
-                    ->modalDescription('Apakah Anda yakin ingin menghapus semua data yang dipilih? Tindakan ini tidak dapat dibatalkan.')
-                    ->modalSubmitActionLabel('Ya, Hapus Semua')
-                    ->deselectRecordsAfterCompletion()
-                    ->successNotificationTitle('Data terpilih berhasil dihapus'),
-            ])
-                ->label('')
-                ->icon('heroicon-m-ellipsis-vertical')
-                ->tooltip('Actions'),
+            Actions\DeleteBulkAction::make()
+                ->requiresConfirmation()
+                ->modalHeading('Hapus Data Terpilih')
+                ->modalDescription('Apakah Anda yakin ingin menghapus semua data yang dipilih? Tindakan ini tidak dapat dibatalkan.')
+                ->modalSubmitActionLabel('Ya, Hapus Semua')
+                ->deselectRecordsAfterCompletion()
+                ->successNotificationTitle('Data terpilih berhasil dihapus'),
         ];
     }
 }

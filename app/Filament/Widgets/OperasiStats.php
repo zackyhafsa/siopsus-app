@@ -7,10 +7,16 @@ use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Number;
+use Illuminate\Support\Facades\Auth;
 
 class OperasiStats extends BaseWidget
 {
     protected ?string $heading = 'Ringkasan Operasi';
+
+    public static function canView(): bool
+    {
+        return Auth::check() && Auth::user()->isAdmin();
+    }
 
     // dengarkan event dari filter bar
     protected $listeners = ['range-updated' => 'applyRange'];
