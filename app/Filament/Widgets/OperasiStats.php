@@ -15,7 +15,10 @@ class OperasiStats extends BaseWidget
 
     public static function canView(): bool
     {
-        return Auth::check() && Auth::user()->isAdmin();
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        return $user?->isAdmin() ?? false;
     }
 
     // dengarkan event dari filter bar

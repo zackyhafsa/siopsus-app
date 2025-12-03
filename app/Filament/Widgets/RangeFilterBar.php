@@ -9,7 +9,10 @@ class RangeFilterBar extends Widget
 {
     public static function canView(): bool
     {
-        return Auth::check() && Auth::user()->isAdmin();
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        return $user?->isAdmin() ?? false;
     }
     protected ?string $heading = null;
     protected string $view = 'filament.widgets.range-filter-bar';
