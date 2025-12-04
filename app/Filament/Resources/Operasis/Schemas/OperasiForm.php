@@ -89,19 +89,6 @@ class OperasiForm
                 ->maxLength(191)
                 ->required(),
 
-            // Koordinat (opsional)
-            \Filament\Forms\Components\TextInput::make('latitude')
-                ->label('Latitude')
-                ->numeric()->minValue(-90)->maxValue(90)
-                ->step('any')
-                ->helperText('Opsional, -90 s/d 90'),
-
-            \Filament\Forms\Components\TextInput::make('longitude')
-                ->label('Longitude')
-                ->numeric()->minValue(-180)->maxValue(180)
-                ->step('any')
-                ->helperText('Opsional, -180 s/d 180'),
-
             \Filament\Forms\Components\Select::make('status_pembayaran')
                 ->label('Status Pembayaran')
                 ->options([

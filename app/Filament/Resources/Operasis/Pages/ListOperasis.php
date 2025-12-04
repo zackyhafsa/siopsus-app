@@ -102,17 +102,4 @@ class ListOperasis extends ListRecords
                 ->successNotificationTitle('Data berhasil dihapus'),
         ];
     }
-
-    protected function getTableBulkActions(): array
-    {
-        return [
-            Actions\DeleteBulkAction::make()
-                ->requiresConfirmation()
-                ->modalHeading('Hapus Data Terpilih')
-                ->modalDescription('Apakah Anda yakin ingin menghapus semua data yang dipilih? Tindakan ini tidak dapat dibatalkan.')
-                ->modalSubmitActionLabel('Ya, Hapus Semua')
-                ->deselectRecordsAfterCompletion()
-                ->successNotificationTitle('Data terpilih berhasil dihapus'),
-        ];
-    }
 }

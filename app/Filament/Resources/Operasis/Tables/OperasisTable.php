@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Operasis\Tables;
 
+use Filament\Actions\DeleteBulkAction;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Number;
@@ -121,6 +122,16 @@ class OperasisTable
             ->recordAction(null)
             ->recordUrl(null)
             ->checkIfRecordIsSelectableUsing(fn() => true)
-            ->defaultSort('tanggal_operasi', 'desc');
+            ->defaultSort('tanggal_operasi', 'desc')
+            ->bulkActions([
+                DeleteBulkAction::make()
+                    ->label('Hapus yang Dipilih')
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Data Terpilih')
+                    ->modalDescription('Apakah Anda yakin ingin menghapus semua data yang dipilih? Tindakan ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Ya, Hapus Semua')
+                    ->deselectRecordsAfterCompletion()
+                    ->successNotificationTitle('Data terpilih berhasil dihapus'),
+            ]);
     }
 }

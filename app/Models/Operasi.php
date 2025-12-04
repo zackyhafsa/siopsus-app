@@ -21,8 +21,6 @@ class Operasi extends Model
         'foto_kendaraan',
         'user_id',
         'lokasi',
-        'latitude',
-        'longitude',
         "status_pembayaran"
     ];
 
@@ -35,8 +33,6 @@ class Operasi extends Model
         'denda_opsen_pkb' => 'integer',
         'pokok_swdkllj' => 'integer',
         'denda_swdkllj' => 'integer',
-        'latitude' => 'float',
-        'longitude' => 'float',
         'status_pembayaran' => "string",
         'user_id' => 'integer',
     ];
