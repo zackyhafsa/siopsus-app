@@ -1,9 +1,9 @@
 <x-filament-widgets::widget>
     <x-filament::section>
-        <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex justify-between gap-3 flex-col">
             <h3 class="text-2xl font-semibold ">Filter</h3>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
                 {{-- Tombol preset --}}
                 <x-filament::button :color="$range === 'day' ? 'primary' : 'gray'" wire:click="setRange('day')">
                     Hari ini
@@ -21,9 +21,6 @@
                         <input type="date" wire:model.live="date"
                             class="fi-input block w-full rounded-lg border-gray-300 text-sm" />
                     </x-filament::input.wrapper>
-                    <x-filament::badge :color="$range === 'date' ? 'primary' : 'gray'">
-                        {{ $range === 'date' && $date ? \Illuminate\Support\Carbon::parse($date)->isoFormat('DD MMM YYYY') : 'Pilih Tanggal' }}
-                    </x-filament::badge>
                 </div>
             </div>
         </div>
